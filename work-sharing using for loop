@@ -1,0 +1,98 @@
+# include "stdio.h"
+
+#include "030_ws_for_pp1.h"
+#include "031_wsc_for_num_square.h"
+
+
+int main() {
+    //fn_wsc_for_1construct();
+
+    //fn_wsc_for_2constructs();
+
+    
+    const int size = 12;
+    int arr[size], sq_serial[size], sq_parallel[size];
+
+    // Initialize array
+    fn_initialize_array(arr, size);
+    // --- Serial Execution ---
+
+    
+
+    printf("\n1.Execute in serial \n2.Execute in parallel \n3.Check serial Execution time \n4.Check parallel Execution time \n5.Exit");
+    int ch=0;
+    
+    do{
+        scanf_s("%d",&ch);
+        switch(ch) {
+        case 1: {
+            
+            int arr[size], sq_serial[size], sq_parallel[size]{};
+            
+            fn_initialize_array(arr, size);
+            fn_compute_square_serial(arr, sq_serial, size);
+            display_array("Squares (Serial)", sq_serial, size);
+
+        }break;
+
+        case 2: {
+            int arr[size], sq_serial[size], sq_parallel[size]{};
+
+            fn_initialize_array(arr, size);
+            fn_compute_square_parallel(arr, sq_parallel, size);
+            display_array("Squares (Parallel)", sq_parallel, size);
+          }break;
+        case 3: {
+            double start_serial = omp_get_wtime();
+            fn_compute_square_serial(arr, sq_serial, size);
+            double end_serial = omp_get_wtime();
+            double time_serial = end_serial - start_serial;
+            printf("Time taken for serial computation   : %f seconds\n", time_serial);
+
+          }break;
+
+        case 4: {
+            double start_parallel = omp_get_wtime();
+            int threads_used = fn_compute_square_parallel(arr, sq_parallel, size);
+            double end_parallel = omp_get_wtime();
+            double time_parallel = end_parallel - start_parallel;
+            printf("Time taken for parallel computation : %f seconds\n", time_parallel);
+
+
+        }break;
+
+        case 5: {
+          
+
+            double start_serial = omp_get_wtime();
+            fn_compute_square_serial(arr, sq_serial, size);
+            double end_serial = omp_get_wtime();
+            double time_serial = end_serial - start_serial;
+
+            // --- Parallel Execution ---
+            double start_parallel = omp_get_wtime();
+            int threads_used = fn_compute_square_parallel(arr, sq_parallel, size);
+            double end_parallel = omp_get_wtime();
+            double time_parallel = end_parallel - start_parallel;
+
+            // --- Compute Speedup and Efficiency ---
+            double speedup = time_serial / time_parallel;
+            double efficiency = speedup / threads_used;
+
+            printf("Speedup                             : %.2f\n", speedup);
+            printf("Efficiency                          : %.2f%%\n", efficiency * 100);
+
+           
+
+        }break;
+
+        }
+
+
+    } while (ch != 6);
+
+
+   
+    return 0;
+    
+}
